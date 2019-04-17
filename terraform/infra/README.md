@@ -51,5 +51,12 @@ az aks get-credentials -g cdw-kubernetes-20190417 -n cdw-kubernetes-20190417
 
 # From ingress folder
 terraform init
+```
 
+```bash
+# Create a namespace for your ingress resources
+kubectl create namespace ingress-basic
+
+# Use Helm to deploy an NGINX ingress controller
+helm install stable/nginx-ingress --namespace ingress-basic --set controller.replicaCount=2
 ```

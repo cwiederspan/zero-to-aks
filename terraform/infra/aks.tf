@@ -25,15 +25,15 @@ resource "azurerm_kubernetes_cluster" "aks" {
     client_secret = "${var.service_principal_pwd}"
   }
 
-  role_based_access_control {
-    enabled = true
-  }
+  # role_based_access_control {
+  #   enabled = true
+  # }
 
-#   addon_profile {
-#     http_application_routing {
-#       enabled = true
-#     }
-#   }
+  # addon_profile {
+  #   http_application_routing {
+  #     enabled = true
+  #   }
+  # }
 
   network_profile {
     network_plugin = "azure"
