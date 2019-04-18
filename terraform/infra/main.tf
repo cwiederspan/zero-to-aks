@@ -2,6 +2,10 @@ provider "azurerm" {
   version = "=1.24.0"
 }
 
+provider "azuread" {
+  version = "=0.1.0"
+}
+
 terraform {
   backend "azurerm" {
     environment = "public"
@@ -16,9 +20,9 @@ variable "name_suffix" { }
 
 variable "location" { }
 
-variable "service_principal_name" { }
+# variable "service_principal_name" { }
 
-variable "service_principal_pwd" { }
+# variable "service_principal_pwd" { }
 
 variable "node_count" { }
 

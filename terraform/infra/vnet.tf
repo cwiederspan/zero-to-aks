@@ -1,6 +1,6 @@
 locals {
   vnet_name           = "${var.name_prefix}-${var.name_base}-${var.name_suffix}-vnet"
-  routetable_name     = "${var.name_prefix}-${var.name_base}-${var.name_suffix}-routetable"
+  # routetable_name     = "${var.name_prefix}-${var.name_base}-${var.name_suffix}-routetable"
   cluster_subnet_name = "cluster-subnet"
 
   #gateway_subnet_name = "gateway-subnet"
@@ -8,18 +8,23 @@ locals {
   #public_ip_name = 
 }
 
-resource "azurerm_route_table" "route" {
-  name                = "${local.routetable_name}"
-  location            = "${azurerm_resource_group.group.location}"
-  resource_group_name = "${azurerm_resource_group.group.name}"
+# resource "azurerm_route_table" "route" {
+#   name                = "${local.routetable_name}"
+#   location            = "${azurerm_resource_group.group.location}"
+#   resource_group_name = "${azurerm_resource_group.group.name}"
 
-  # route {
-  #   name                   = "default"
-  #   address_prefix         = "10.244.0.0/24"
-  #   next_hop_type          = "VirtualAppliance"
-  #   next_hop_in_ip_address = "10.240.0.4"
-  # }
-}
+#   # route {
+#   #   name                   = "default"
+#   #   address_prefix         = "10.244.0.0/24"
+#   #   next_hop_type          = "VirtualAppliance"
+#   #   next_hop_in_ip_address = "10.240.0.4"
+#   # }
+# }
+
+# resource "azurerm_subnet_route_table_association" "test" {
+#   subnet_id      = "${azurerm_subnet.cluster.id}"
+#   route_table_id = "${azurerm_route_table.route.id}"
+# }
 
 resource "azurerm_virtual_network" "vnet" {
   name                = "${local.vnet_name}"
@@ -40,9 +45,6 @@ resource "azurerm_subnet" "cluster" {
   resource_group_name  = "${azurerm_resource_group.group.name}"
   virtual_network_name = "${azurerm_virtual_network.vnet.name}"
   address_prefix       = "10.240.0.0/16"
-  
-  # this field is deprecated and will be removed in 2.0 - but is required until then
-  route_table_id = "${azurerm_route_table.route.id}"
 }
 
 # resource "azurerm_public_ip" "ip" {
