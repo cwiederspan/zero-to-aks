@@ -28,6 +28,10 @@ variable "node_count" { }
 
 variable "aks_version" { }
 
+variable "ingress_namespace" { }
+
+variable "helm_repo_password" { }
+
 
 # VNET and App Gateway Variables
 

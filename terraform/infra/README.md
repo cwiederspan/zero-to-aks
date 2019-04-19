@@ -60,3 +60,12 @@ kubectl create namespace ingress-basic
 # Use Helm to deploy an NGINX ingress controller
 helm install stable/nginx-ingress --namespace ingress-basic --set controller.replicaCount=2
 ```
+
+## Misc Tidbits
+
+```bash
+az aks get-credentials -n cdw-kubernetes-20190417 -g cdw-kubernetes-20190417 --overwrite-existing
+
+
+
+```
