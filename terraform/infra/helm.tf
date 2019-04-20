@@ -45,23 +45,43 @@ EOF
   depends_on = ["kubernetes_cluster_role_binding.tiller"]
 }
 
-# Install a load-balanced nginx-ingress controller onto the cluster
+# Install a sample application to test connectivity
+resource "helm_release" "azure-sample" {
+  name       = "azure-sample-app"
+  repository = "https://azure-samples.github.io/helm-charts/"
+  chart      = "aks-helloworld"
+  namespace  = "testing"
+
+  values = [<<EOF
+fullname: azure-sample-application
+name: azure-sample
+ingress:
+  enabled: true
+  path: /sample
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: false
+    nginx.ingress.kubernetes.io/force-ssl-redirect: false
+    nginx.ingress.kubernetes.io/rewrite-target: /
+EOF
+  ]
+
+  depends_on = ["kubernetes_cluster_role_binding.tiller"]
+}
+
+# Install a sample application to test connectivity
 resource "helm_release" "hello-world" {
-  name      = "hello-world-app"
+  name       = "hello-world-app"
   repository = "${data.helm_repository.private.metadata.0.name}"
-  chart     = "shared-chart"
-  namespace = "testing"
+  chart      = "shared-chart"
+  namespace  = "testing"
 
   values = [<<EOF
 fullname: hello-world-application
 name: hello-world
 image:
-  repository: mcr.microsoft.com/dotnet/core/samples
-  tag: aspnetapp
-annotations:
-  kubernetes.io/ingress.class: nginx
-  nginx.ingress.kubernetes.io/ssl-redirect: false
-  nginx.ingress.kubernetes.io/rewrite-target: /
+  repository: appsvcsample/python-helloworld
+  tag: latest
 service:
   type: ClusterIP
   port: 80
@@ -73,8 +93,12 @@ probes:
 ingress:
   enabled: true
   path: /helloworld
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /
 EOF
   ]
 
-  depends_on = ["kubernetes_cluster_role_binding.tiller"]
+  depends_on = ["helm_release.ingress"]
 }
