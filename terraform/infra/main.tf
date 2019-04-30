@@ -32,6 +32,8 @@ variable "ingress_namespace" { }
 
 variable "helm_repo_password" { }
 
+variable ingress_load_balancer_ip { }
+
 
 # VNET and App Gateway Variables
 

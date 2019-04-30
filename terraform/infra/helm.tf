@@ -28,6 +28,11 @@ resource "helm_release" "ingress" {
   values = [<<EOF
 controller:
   replicaCount: 2
+  service:
+    loadBalancerIP: ${var.ingress_load_balancer_ip}
+    annotations:
+      service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+      service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "${local.cluster_subnet_name}"
 EOF
   ]
 
