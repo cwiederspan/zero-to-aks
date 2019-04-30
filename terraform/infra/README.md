@@ -36,7 +36,7 @@ terraform apply -var-file=secrets.tfvars
 
 ## Install Helm/Tiller
 
-https://docs.microsoft.com/en-us/azure/aks/kubernetes-helm
+<https://docs.microsoft.com/en-us/azure/aks/kubernetes-helm>
 
 ```bash
 kubectl apply -f helm-rbac.yaml
