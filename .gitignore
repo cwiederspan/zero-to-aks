@@ -7,3 +7,6 @@
 
 # secret.tfvars files
 **/*secret*.tfvars
+
+# Ignore certs
+**/*.pfx
