@@ -2,7 +2,7 @@
 // https://github.com/terraform-providers/terraform-provider-azurerm/issues/2159
 
 locals {
-  sp_application_name = "${var.name_prefix}-${var.name_base}-${var.name_suffix}-sp"
+  sp_application_name = "${local.base_name}-sp"
 }
 
 # Generate random string to be used as service principal password
@@ -29,7 +29,21 @@ resource "azuread_service_principal_password" "aks" {
 }
 
 # Assign the Service Principal to the Network Contributor role
-resource "azurerm_role_assignment" "aks" {
+resource "azurerm_role_assignment" "gateway" {
+  principal_id         = "${azuread_service_principal.aks.id}"
+  role_definition_name = "Network Contributor"
+  scope                = "${azurerm_subnet.gateway.id}"
+}
+
+# Assign the Service Principal to the Network Contributor role
+resource "azurerm_role_assignment" "ingress" {
+  principal_id         = "${azuread_service_principal.aks.id}"
+  role_definition_name = "Network Contributor"
+  scope                = "${azurerm_subnet.ingress.id}"
+}
+
+# Assign the Service Principal to the Network Contributor role
+resource "azurerm_role_assignment" "cluster" {
   principal_id         = "${azuread_service_principal.aks.id}"
   role_definition_name = "Network Contributor"
   scope                = "${azurerm_subnet.cluster.id}"

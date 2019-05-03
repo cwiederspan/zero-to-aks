@@ -20,10 +20,6 @@ variable "name_suffix" { }
 
 variable "location" { }
 
-# variable "service_principal_name" { }
-
-# variable "service_principal_pwd" { }
-
 variable "node_count" { }
 
 variable "aks_version" { }
@@ -32,23 +28,14 @@ variable "ingress_namespace" { }
 
 variable "helm_repo_password" { }
 
-variable ingress_load_balancer_ip { }
+variable "ingress_load_balancer_ip" { }
 
+variable "gateway_instance_count" { }
 
-# VNET and App Gateway Variables
+variable "ssl_filename" { }
 
-#variable "storage_name" { }     # This should eventually go away
+variable "ssl_password" { }
 
-#variable "ssl_filename" { }     # This should eventually go away
-
-#variable "ssl_password" { }     # This should eventually go away
-
-#variable "gateway_name" { }
-
-#variable "gateway_instance_count" {
-#  default = 1
-#}
-
-#variable "public_ip_name" { }
-
-#variable "vnet_name" { }
+locals {
+  base_name = "${var.name_prefix}-${var.name_base}-${var.name_suffix}"
+}

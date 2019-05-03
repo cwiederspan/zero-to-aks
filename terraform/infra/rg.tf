@@ -1,6 +1,6 @@
 
 locals {
-  resource_group_name = "${var.name_prefix}-${var.name_base}-${var.name_suffix}"
+  resource_group_name = "${local.base_name}"
 }
 
 resource "azurerm_resource_group" "group" {

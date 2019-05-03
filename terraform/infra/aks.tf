@@ -1,12 +1,12 @@
 locals {
-  aks_service_name = "${var.name_prefix}-${var.name_base}-${var.name_suffix}"
+  aks_service_name = "${local.base_name}-aks"
 }
 
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = "${local.aks_service_name}"
   resource_group_name = "${azurerm_resource_group.group.name}"
   location            = "${azurerm_resource_group.group.location}"
-  dns_prefix          = "${local.aks_service_name}"
+  dns_prefix          = "${local.base_name}"
   kubernetes_version  = "${var.aks_version}"
 
   agent_pool_profile {

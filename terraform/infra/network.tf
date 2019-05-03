@@ -1,11 +1,13 @@
 locals {
-  vnet_name           = "${var.name_prefix}-${var.name_base}-${var.name_suffix}-vnet"
-  # routetable_name     = "${var.name_prefix}-${var.name_base}-${var.name_suffix}-routetable"
-  cluster_subnet_name = "cluster-subnet"
+  vnet_name           = "${local.base_name}-vnet"
 
-  #gateway_subnet_name = "gateway-subnet"
-  #gateway_name = 
-  #public_ip_name = 
+  # routetable_name     = "${var.base_name}-routetable"
+
+  gateway_subnet_name = "gateway-subnet"
+
+  ingress_subnet_name = "ingress-subnet"
+
+  cluster_subnet_name = "cluster-subnet"
 }
 
 # resource "azurerm_route_table" "route" {
@@ -33,25 +35,23 @@ resource "azurerm_virtual_network" "vnet" {
   address_space       = ["10.0.0.0/8"]
 }
 
-# resource "azurerm_subnet" "gateway" {
-#   name                 = "${local.gateway_subnet_name}"
-#   resource_group_name  = "${azurerm_resource_group.group.name}"
-#   virtual_network_name = "${azurerm_virtual_network.vnet.name}"
-#   address_prefix       = "10.10.1.0/24"
-# }
+resource "azurerm_subnet" "gateway" {
+  name                 = "${local.gateway_subnet_name}"
+  resource_group_name  = "${azurerm_resource_group.group.name}"
+  virtual_network_name = "${azurerm_virtual_network.vnet.name}"
+  address_prefix       = "10.0.1.0/24"
+}
+
+resource "azurerm_subnet" "ingress" {
+  name                 = "${local.ingress_subnet_name}"
+  resource_group_name  = "${azurerm_resource_group.group.name}"
+  virtual_network_name = "${azurerm_virtual_network.vnet.name}"
+  address_prefix       = "10.0.2.0/24"
+}
 
 resource "azurerm_subnet" "cluster" {
   name                 = "${local.cluster_subnet_name}"
   resource_group_name  = "${azurerm_resource_group.group.name}"
   virtual_network_name = "${azurerm_virtual_network.vnet.name}"
-  address_prefix       = "10.240.0.0/16"
+  address_prefix       = "10.1.0.0/16"
 }
-
-# resource "azurerm_public_ip" "ip" {
-#   name                = "${local.public_ip_name}"
-#   resource_group_name = "${azurerm_resource_group.group.name}"
-#   location            = "${azurerm_resource_group.group.location}"
-#   domain_name_label   = "${local.gateway_name}"
-#   allocation_method   = "Static"
-#   sku                 = "Standard"
-# }

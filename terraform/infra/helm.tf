@@ -32,20 +32,9 @@ controller:
     loadBalancerIP: ${var.ingress_load_balancer_ip}
     annotations:
       service.beta.kubernetes.io/azure-load-balancer-internal: "true"
-      service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "${local.cluster_subnet_name}"
+      service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "${local.ingress_subnet_name}"
 EOF
   ]
-
-#   values = [<<EOF
-# controller:
-#   replicaCount: 2
-#   service:
-#     loadBalancerIP: ${var.ingress_load_balancer_ip}
-#     annotations:
-#       service.beta.kubernetes.io/azure-load-balancer-internal: "true"
-#       service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "${azurerm_subnet.ingress.name}"
-# EOF
-#   ]
 
   depends_on = ["kubernetes_cluster_role_binding.tiller"]
 }
