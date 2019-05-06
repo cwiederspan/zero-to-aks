@@ -28,6 +28,7 @@ resource "helm_release" "ingress" {
   values = [<<EOF
 controller:
   replicaCount: 2
+  healthStatus: "true"
   service:
     loadBalancerIP: ${var.ingress_load_balancer_ip}
     annotations:

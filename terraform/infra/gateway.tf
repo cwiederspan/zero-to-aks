@@ -95,7 +95,8 @@ resource "azurerm_application_gateway" "gateway" {
   probe {
     name                = "${local.probe_name}"
     protocol            = "http"
-    path                = "/"
+    # path                = "/nginx-health"
+    path                = "/helloworld"
     interval            = 30
     timeout             = 30
     unhealthy_threshold = 3

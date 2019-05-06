@@ -65,7 +65,4 @@ helm install stable/nginx-ingress --namespace ingress-basic --set controller.rep
 
 ```bash
 az aks get-credentials -n cdw-kubernetes-20190417 -g cdw-kubernetes-20190417 --overwrite-existing
-
-
-
 ```
