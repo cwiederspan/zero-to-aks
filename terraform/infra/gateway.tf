@@ -95,8 +95,7 @@ resource "azurerm_application_gateway" "gateway" {
   probe {
     name                = "${local.probe_name}"
     protocol            = "http"
-    # path                = "/nginx-health"
-    path                = "/helloworld"
+    path                = "/healthz"        # Query NGINX ingress - this seems to work and is the path that shows up when dumping out the nginx config file
     interval            = 30
     timeout             = 30
     unhealthy_threshold = 3
