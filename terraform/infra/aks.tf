@@ -14,6 +14,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     count   = "${var.node_count}"
     vm_size = "Standard_DS2_v2"
     os_type = "Linux"
+    type    = "VirtualMachineScaleSets"
     
     # Required for advanced networking
     vnet_subnet_id = "${azurerm_subnet.cluster.id}"

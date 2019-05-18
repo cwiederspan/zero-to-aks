@@ -1,5 +1,5 @@
 provider "azurerm" {
-  version = "=1.24.0"
+  version = "=1.28.0"
 }
 
 provider "azuread" {
