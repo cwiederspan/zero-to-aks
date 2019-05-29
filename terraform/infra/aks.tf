@@ -10,7 +10,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   kubernetes_version  = "${var.aks_version}"
 
   agent_pool_profile {
-    name    = "agentpool"
+    name    = "linux01"
     count   = "${var.node_count}"
     vm_size = "Standard_DS2_v2"
     os_type = "Linux"
@@ -19,6 +19,18 @@ resource "azurerm_kubernetes_cluster" "aks" {
     # Required for advanced networking
     vnet_subnet_id = "${azurerm_subnet.cluster.id}"
   }
+  
+  # This doesn't work because we need a windows username and password
+  # agent_pool_profile {
+  #   name    = "win01"               # Cannot be longer than 6 chars
+  #   count   = "${var.node_count}"
+  #   vm_size = "Standard_DS2_v2"
+  #   os_type = "Windows"
+  #   type    = "VirtualMachineScaleSets"
+  
+  #   # Required for advanced networking
+  #   vnet_subnet_id = "${azurerm_subnet.cluster.id}"
+  # }
 
   # service_principal {
   #   client_id     = "${var.service_principal_name}"
