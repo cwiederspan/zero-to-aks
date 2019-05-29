@@ -46,11 +46,17 @@ resource "azurerm_kubernetes_cluster" "aks" {
     enabled = true
   }
 
-  # addon_profile {
-  #   http_application_routing {
-  #     enabled = true
-  #   }
-  # }
+  addon_profile {
+
+    oms_agent {
+      enabled                    = true
+      log_analytics_workspace_id = "${azurerm_log_analytics_workspace.workspace.id}"
+    }
+
+    # http_application_routing {
+    #   enabled = true
+    # }
+  }
 
   network_profile {
     network_plugin     = "azure"
