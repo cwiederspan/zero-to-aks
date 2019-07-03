@@ -1,9 +1,9 @@
 provider "azurerm" {
-  version = "=1.29.0"
+  version = "=1.31.0"
 }
 
 provider "azuread" {
-  version = "=0.1.0"
+  version = "=0.4.0"
 }
 
 terraform {
@@ -26,8 +26,6 @@ variable "aks_version" { }
 
 variable "ingress_namespace" { }
 
-variable "helm_repo_password" { }
-
 variable "ingress_load_balancer_ip" { }
 
 variable "gateway_instance_count" { }
@@ -38,4 +36,20 @@ variable "ssl_password" { }
 
 locals {
   base_name = "${var.name_prefix}-${var.name_base}-${var.name_suffix}"
+}
+
+module "service_principal" {
+  source    = "../modules/service-principal"
+  base_name = "${local.base_name}"
+}
+
+module "monitoring" {
+  source         = "../modules/monitoring"
+  base_name      = "${local.base_name}"
+  resource_group = "${azurerm_resource_group.group.name}"
+  location       = "${azurerm_resource_group.group.location}"
+}
+
+module "sample_app" {
+  source = "../modules/sample-app"
 }

@@ -21,8 +21,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   service_principal {
-    client_id     = "${azuread_application.aks.application_id}"
-    client_secret = "${azuread_service_principal_password.aks.value}"
+    client_id     = "${module.service_principal.client_id}"
+    client_secret = "${module.service_principal.client_secret}"
   }
 
   role_based_access_control {
@@ -33,7 +33,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
     oms_agent {
       enabled                    = true
-      log_analytics_workspace_id = "${azurerm_log_analytics_workspace.workspace.id}"
+      log_analytics_workspace_id = "${module.monitoring.workspace_id}"
     }
 
     # http_application_routing {
@@ -51,4 +51,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
   # lifecycle {
   #   prevent_destroy = true
   # }
+
+  depends_on = ["module.service_principal"]
 }

@@ -1,9 +1,11 @@
 // Read more about why we're doing this
 // https://github.com/terraform-providers/terraform-provider-azurerm/issues/2159
 
-locals {
-  sp_application_name = "${local.base_name}-sp"
+provider "random" {
+  version = "2.1"
 }
+
+variable "base_name" { }
 
 # Generate random string to be used as service principal password
 resource "random_string" "password" {
@@ -13,7 +15,7 @@ resource "random_string" "password" {
 
 # Create Azure AD Application for Service Principal
 resource "azuread_application" "aks" {
-  name = "${local.sp_application_name}"
+  name = "${var.base_name}-sp"
 }
 
 # Create Service Principal
@@ -28,9 +30,10 @@ resource "azuread_service_principal_password" "aks" {
   value                = "${random_string.password.result}"
 }
 
-# Assign the Service Principal to the Network Contributor role
-resource "azurerm_role_assignment" "cluster" {
-  principal_id         = "${azuread_service_principal.aks.id}"
-  role_definition_name = "Network Contributor"
-  scope                = "${azurerm_subnet.cluster.id}"
+output "client_id" {
+  value = "${azuread_application.aks.application_id}"
+}
+
+output "client_secret" {
+  value = "${azuread_service_principal_password.aks.value}"
 }
