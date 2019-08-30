@@ -16,6 +16,8 @@ name: hello-world
 image:
   repository: appsvcsample/python-helloworld
   tag: latest
+nodeSelector: 
+  "beta.kubernetes.io/os": linux
 service:
   type: ClusterIP
   port: 80

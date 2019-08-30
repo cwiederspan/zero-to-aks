@@ -3,10 +3,14 @@ provider "helm" {
   version = "0.10"
 
   kubernetes {
-    host                   = "${azurerm_kubernetes_cluster.aks.kube_config.0.host}"
-    client_certificate     = "${base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate)}"
-    client_key             = "${base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_key)}"
-    cluster_ca_certificate = "${base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.cluster_ca_certificate)}"
+    host = azurerm_kubernetes_cluster.aks.kube_config[0].host
+    client_certificate = base64decode(
+      azurerm_kubernetes_cluster.aks.kube_config[0].client_certificate,
+    )
+    client_key = base64decode(azurerm_kubernetes_cluster.aks.kube_config[0].client_key)
+    cluster_ca_certificate = base64decode(
+      azurerm_kubernetes_cluster.aks.kube_config[0].cluster_ca_certificate,
+    )
   }
 
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
@@ -17,9 +21,10 @@ provider "helm" {
 resource "helm_release" "ingress" {
   name      = "nginx-ingress"
   chart     = "stable/nginx-ingress"
-  namespace = "${var.ingress_namespace}"
+  namespace = var.ingress_namespace
 
-  values = [<<EOF
+  values = [
+    <<EOF
 controller:
   replicaCount: 2
   healthStatus: "true"
@@ -29,7 +34,9 @@ controller:
       service.beta.kubernetes.io/azure-load-balancer-internal: "true"
       service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "${local.ingress_subnet_name}"
 EOF
+    ,
   ]
 
-  depends_on = ["kubernetes_cluster_role_binding.tiller"]
+  depends_on = [kubernetes_cluster_role_binding.tiller]
 }
+

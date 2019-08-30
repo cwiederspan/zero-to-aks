@@ -1,16 +1,19 @@
 # Define Kubernetes provider to use the AKS cluster
 provider "kubernetes" {
   version = "1.8"
-  host    = "${azurerm_kubernetes_cluster.aks.kube_config.0.host}"
+  host    = azurerm_kubernetes_cluster.aks.kube_config[0].host
 
-  client_certificate     = "${base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate)}"
-  client_key             = "${base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_key)}"
-  cluster_ca_certificate = "${base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.cluster_ca_certificate)}"
+  client_certificate = base64decode(
+    azurerm_kubernetes_cluster.aks.kube_config[0].client_certificate,
+  )
+  client_key = base64decode(azurerm_kubernetes_cluster.aks.kube_config[0].client_key)
+  cluster_ca_certificate = base64decode(
+    azurerm_kubernetes_cluster.aks.kube_config[0].cluster_ca_certificate,
+  )
 }
 
 # Create a service account for the Helm Tiller
 resource "kubernetes_service_account" "tiller" {
-
   metadata {
     name      = "tiller"
     namespace = "kube-system"
@@ -19,9 +22,8 @@ resource "kubernetes_service_account" "tiller" {
 
 # Grant cluster-admin rights to the Tiller Service Account
 resource "kubernetes_cluster_role_binding" "tiller" {
-
   metadata {
-    name = "${kubernetes_service_account.tiller.metadata.0.name}"
+    name = kubernetes_service_account.tiller.metadata[0].name
   }
 
   role_ref {
@@ -32,14 +34,13 @@ resource "kubernetes_cluster_role_binding" "tiller" {
 
   subject {
     kind      = "ServiceAccount"
-    name      = "${kubernetes_service_account.tiller.metadata.0.name}"
+    name      = kubernetes_service_account.tiller.metadata[0].name
     namespace = "kube-system"
   }
 }
 
 # Grant cluster-admin rights to the kubernetes-dashboard account
 resource "kubernetes_cluster_role_binding" "dashboard" {
-
   metadata {
     name = "kubernetes-dashboard"
   }
@@ -60,7 +61,6 @@ resource "kubernetes_cluster_role_binding" "dashboard" {
 # Grant cluster-admin rights to the default service account
 # This is a terrible idea in general, but a feature of the game is killing other pods
 resource "kubernetes_cluster_role_binding" "default" {
-
   metadata {
     name = "default"
   }
@@ -77,3 +77,4 @@ resource "kubernetes_cluster_role_binding" "default" {
     namespace = "default"
   }
 }
+

@@ -11,7 +11,6 @@
 #     memory = "1.0"
 #   }
 # }
-
 # resource "null_resource" "bastion" {
 # 
 #   provisioner "local-exec" {

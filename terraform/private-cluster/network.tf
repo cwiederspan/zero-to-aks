@@ -1,5 +1,5 @@
 locals {
-  vnet_name           = "${local.base_name}-vnet"
+  vnet_name = "${local.base_name}-vnet"
 
   # routetable_name     = "${var.base_name}-routetable"
 
@@ -7,7 +7,6 @@ locals {
   ingress_subnet_name = "ingress-subnet"
   bastion_subnet_name = "bastion-subnet"
   cluster_subnet_name = "cluster-subnet"
-
 }
 
 # resource "azurerm_route_table" "route" {
@@ -29,30 +28,30 @@ locals {
 # }
 
 resource "azurerm_virtual_network" "vnet" {
-  name                = "${local.vnet_name}"
-  resource_group_name = "${azurerm_resource_group.group.name}"
-  location            = "${azurerm_resource_group.group.location}"
+  name                = local.vnet_name
+  resource_group_name = azurerm_resource_group.group.name
+  location            = azurerm_resource_group.group.location
   address_space       = ["10.0.0.0/8"]
 }
 
 resource "azurerm_subnet" "gateway" {
-  name                 = "${local.gateway_subnet_name}"
-  resource_group_name  = "${azurerm_resource_group.group.name}"
-  virtual_network_name = "${azurerm_virtual_network.vnet.name}"
+  name                 = local.gateway_subnet_name
+  resource_group_name  = azurerm_resource_group.group.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefix       = "10.0.1.0/24"
 }
 
 resource "azurerm_subnet" "ingress" {
-  name                 = "${local.ingress_subnet_name}"
-  resource_group_name  = "${azurerm_resource_group.group.name}"
-  virtual_network_name = "${azurerm_virtual_network.vnet.name}"
+  name                 = local.ingress_subnet_name
+  resource_group_name  = azurerm_resource_group.group.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefix       = "10.0.2.0/24"
 }
 
 resource "azurerm_subnet" "bastion" {
-  name                 = "${local.bastion_subnet_name}"
-  resource_group_name  = "${azurerm_resource_group.group.name}"
-  virtual_network_name = "${azurerm_virtual_network.vnet.name}"
+  name                 = local.bastion_subnet_name
+  resource_group_name  = azurerm_resource_group.group.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefix       = "10.0.3.0/24"
 
   delegation {
@@ -65,8 +64,9 @@ resource "azurerm_subnet" "bastion" {
 }
 
 resource "azurerm_subnet" "cluster" {
-  name                 = "${local.cluster_subnet_name}"
-  resource_group_name  = "${azurerm_resource_group.group.name}"
-  virtual_network_name = "${azurerm_virtual_network.vnet.name}"
+  name                 = local.cluster_subnet_name
+  resource_group_name  = azurerm_resource_group.group.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefix       = "10.1.0.0/16"
 }
+
