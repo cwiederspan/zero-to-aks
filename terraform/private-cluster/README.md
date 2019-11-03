@@ -1,68 +1,15 @@
-# Quick Notes
+# Create an AKS Cluster with an Internal Load Balancer Fronted by an App Gateway
 
-## Create some storage in Azure
+## Setup
 
-## Create a backend-secrets.tfvars file
+### Remote State and Variable Setup
 
-```hcl
-storage_account_name = "cdwterraformstate"
-container_name       = "zero-to-azure"
-key                  = "cdw-kubernetes-20190417/Production.tfstate"
-access_key           = "XXX"
-```
+Make sure you have followed the instructions on the root [README.md](../README.md) files section on setting
+up and configuring the remote state that you will need when `terraform init...`, and that you have made the
+necessary changes so that you have a `secrets.tfvars` and a `terraform.tfvars` file with the correct values.
 
-```bash
-terraform init -reconfigure -backend-config=./backend-secrets.tfvars
-```
-
-## Create a service principal
+## Terraform
 
 ```bash
-az ad sp create-for-rbac --name <YOUR_SP_NAME> --skip-assignment
-```
-
-## Create secrets.tfvars
-
-```hcl
-service_principal_name = "29b2330a-XXXX-XXXX-XXXX-ad7c3b68d92d"
-service_principal_pwd  = "636e6df5-XXXX-XXXX-XXXX-94fa02063ec2"
-```
-
-## Execute the Terraform
-
-```bash
-terraform apply -var-file=secrets.tfvars
-```
-
-## Install Helm/Tiller
-
-<https://docs.microsoft.com/en-us/azure/aks/kubernetes-helm>
-
-```bash
-kubectl apply -f helm-rbac.yaml
-
-helm init --service-account tiller
-```
-
-## Log into the Cluster
-
-```bash
-az aks get-credentials -g cdw-kubernetes-20190417 -n cdw-kubernetes-20190417
-
-# From ingress folder
-terraform init
-```
-
-```bash
-# Create a namespace for your ingress resources
-kubectl create namespace ingress-basic
-
-# Use Helm to deploy an NGINX ingress controller
-helm install stable/nginx-ingress --namespace ingress-basic --set controller.replicaCount=2
-```
-
-## Misc Tidbits
-
-```bash
-az aks get-credentials -n cdw-kubernetes-20190417 -g cdw-kubernetes-20190417 --overwrite-existing
+terraform apply --var-file=secrets.tfvars
 ```

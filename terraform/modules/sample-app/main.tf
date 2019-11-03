@@ -1,6 +1,11 @@
 data "helm_repository" "shared" {
-    name = "cdwmshelm"
-    url  = "https://cdwmshelm.z5.web.core.windows.net"
+  name = "cdwmshelm"
+  url  = "https://cdwmshelm.z5.web.core.windows.net"
+}
+
+variable external_depends_on { 
+  default = []
+  type = "list"
 }
 
 # Install a sample application to test connectivity

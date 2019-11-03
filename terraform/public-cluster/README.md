@@ -1,28 +1,15 @@
-# Create an AKS Cluster in VNET and Public LoadBalancer for Ingress
-
-## Notes
-
-* Helm v2.14.0 doesn't work - upgrade to v2.14.1 instead
+# Create an AKS Cluster with a Public Load Balancer
 
 ## Setup
 
-### Remote Terraform State
+### Remote State and Variable Setup
 
-Assuming you want to use remote cloud storage for you Terraform state files, 
-create a file called **backend-secrets.tfvars**, and add information that looks like this:
+Make sure you have followed the instructions on the root [README.md](../README.md) files section on setting
+up and configuring the remote state that you will need when `terraform init...`, and that you have made the
+necessary changes so that you have a `secrets.tfvars` and a `terraform.tfvars` file with the correct values.
 
-```hcl
-storage_account_name = "mystorageaccount"
-container_name       = "my-aks-cluster"
-key                  = "my-aks-cluster/Production.tfstate"
-access_key           = "access-key-from-azure-storage"
-```
+## Terraform
 
-### Secret Variables
-
-Now setup a file called **secrets.tfvars** with your secrets that you need to execute
-the Terraform script. The file will look like this:
-
-```hcl
-
+```bash
+terraform apply --var-file=secrets.tfvars
 ```

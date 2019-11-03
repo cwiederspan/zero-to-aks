@@ -7,6 +7,7 @@
 
 # secret.tfvars files
 **/*secret*.tfvars
+!**/sample-backend-secrets.tfvars
 
 # Ignore certs
 **/*.pfx

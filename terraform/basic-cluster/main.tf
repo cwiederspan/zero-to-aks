@@ -6,42 +6,34 @@ terraform {
   }
 }
 
-provider "azurerm" {
-  version = "=1.33.1"
-}
-
-provider "azuread" {
-  version = "=0.4.0"
-}
-
-variable "name_prefix" {
-}
-
-variable "name_base" {
-}
-
-variable "name_suffix" {
-}
-
-variable "location" {
-}
-
-variable "node_count" {
-}
-
-variable "aks_version" {
-}
-
-variable "ingress_namespace" {
-}
+variable "name_prefix"       { }
+variable "name_base"         { }
+variable "name_suffix"       { }
+variable "location"          { }
+variable "node_count"        { }
+variable "aks_version"       { }
+variable "ingress_namespace" { }
 
 locals {
   base_name = "${var.name_prefix}-${var.name_base}-${var.name_suffix}"
 }
 
+resource "azurerm_resource_group" "group" {
+  name     = local.base_name
+  location = var.location
+}
+
+module "common" {
+  source    = "../modules/common"
+}
+
 module "service_principal" {
   source    = "../modules/service-principal"
   base_name = local.base_name
+}
+
+module "bindings" {
+  source    = "../modules/role-bindings"
 }
 
 module "monitoring" {
@@ -53,5 +45,8 @@ module "monitoring" {
 
 module "sample_app" {
   source = "../modules/sample-app"
+  
+  external_depends_on = [
+    helm_release.ingress
+  ]
 }
-
