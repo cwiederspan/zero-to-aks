@@ -1,4 +1,4 @@
-# Create an AKS Cluster with an Internal Load Balancer Fronted by an App Gateway
+# AKS Cluster with Internal Load Balancer Fronted by App Gateway
 
 ## Setup
 

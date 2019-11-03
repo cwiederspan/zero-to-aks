@@ -1,4 +1,4 @@
-# Create a Basic AKS Cluster with Kubenet Networking
+# Basic AKS Cluster with Kubenet Networking
 
 ## Setup
 

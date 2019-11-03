@@ -1,4 +1,4 @@
-# Create an AKS Cluster with a Public Load Balancer
+# AKS Cluster with Public Load Balancer
 
 ## Setup
 
