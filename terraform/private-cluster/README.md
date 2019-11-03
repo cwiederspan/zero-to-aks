@@ -1,4 +1,4 @@
-# AKS Cluster with Internal Load Balancer Fronted by App Gateway
+# AKS Cluster with ILB Fronted by App Gateway
 
 ## Setup
 
