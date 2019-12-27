@@ -5,13 +5,13 @@ data "helm_repository" "shared" {
 
 variable external_depends_on { 
   default = []
-  type = "list"
+  type = list
 }
 
 # Install a sample application to test connectivity
 resource "helm_release" "hello-world" {
   name       = "hello-world-app"
-  repository = "${data.helm_repository.shared.metadata.0.name}"
+  repository = data.helm_repository.shared.metadata.0.name
   chart      = "shared-chart"
   namespace  = "sample-app"
 

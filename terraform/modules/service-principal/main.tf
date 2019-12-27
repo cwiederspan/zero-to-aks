@@ -20,20 +20,20 @@ resource "azuread_application" "aks" {
 
 # Create Service Principal
 resource "azuread_service_principal" "aks" {
-  application_id = "${azuread_application.aks.application_id}"
+  application_id = azuread_application.aks.application_id
 }
 
 # Create Service Principal password
 resource "azuread_service_principal_password" "aks" {
   end_date             = "2299-12-30T23:00:00Z"                        # Forever
-  service_principal_id = "${azuread_service_principal.aks.id}"
-  value                = "${random_string.password.result}"
+  service_principal_id = azuread_service_principal.aks.id
+  value                = random_string.password.result
 }
 
 output "client_id" {
-  value = "${azuread_application.aks.application_id}"
+  value = azuread_application.aks.application_id
 }
 
 output "client_secret" {
-  value = "${azuread_service_principal_password.aks.value}"
+  value = azuread_service_principal_password.aks.value
 }
