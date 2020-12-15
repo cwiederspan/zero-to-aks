@@ -95,7 +95,7 @@ locals {
 }
 
 module "monitoring" {
-  source         = "./modules/monitoring"
+  source         = "../modules/monitoring"
   base_name      = local.base_name
   resource_group = azurerm_resource_group.group.name
   location       = azurerm_resource_group.group.location
