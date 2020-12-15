@@ -11,55 +11,58 @@ Clone this repository down to either your local machine or to your Azure Cloud S
 git clone https://github.com/cwiederspan/zero-to-aks.git
 ```
 
-## Shared Features
+## Prerequisites
 
 ### Remote State Storage
 
-Each variation outlined below is designed to store the Terraform state in Azure blob storage. As part
+This sample is designed to store the Terraform state in Azure blob storage. As part
 of that, you must configure and initialize things appropriately. To do so, you will need to update the
-values in a file called `sample-backend-secrets.tfvars` and remove the `sample-` from the file name.
+values in a file called `backend-secrets-sample.tfvars` and remove the `-sample` from the file name.
 
 > NOTE: Do not check this file into your git repo!
 
 Now you can initialize Terraform, specifying the file above for the config.
 
 ```bash
+cd terraform
+
 terraform init --backend-config backend-secrets.tfvars
+
+# Alternative approach is to create a backend-secrets.tfvars file
+echo -e "storage_account_name = \"YOUR_STORAGE_ACCT_NAME\"\ncontainer_name = \"YOUR_STORAGE_CONTAINER\"\nkey = \"cluster.tfstate\"\naccess_key = \"YOUR_STORAGE_ACCT_KEY\"" >> backend-secrets.tfvars
 ```
 
 ### Secret Variables
 
-Rename the `sample-secrets.tfvars` file to `secrets.tfvars` and update the values in that file.
+Rename the `secrets-sample.tfvars` file to `secrets.tfvars` and update the values in that file.
 
-### Variable Values
+## Terraform the Cluster
 
-Update any/all values in the `terraform.tfvars` file to meet your needs.
+```bash
 
-### Service Principal Setup
+# Run the plan to see the changes
+terraform plan \
+-var 'name_prefix=cdw' \
+-var 'name_base=kubernetes' \
+-var 'name_suffix=20201215' \
+-var 'location=westus2' \
+-var 'node_count=2' \
+-var 'enable_azure_policy=true' \
+-var 'acr_rg_name=cdw-shared-resources' \
+-var 'acr_name=cdwms' \
+--var-file=secrets.tfvars
 
-Docs coming soon.
 
-### Helm Installation
+# Apply the script with the specified variable values
+terraform apply \
+-var 'name_prefix=cdw' \
+-var 'name_base=kubernetes' \
+-var 'name_suffix=20201215' \
+-var 'location=westus2' \
+-var 'node_count=2' \
+-var 'enable_azure_policy=true' \
+-var 'acr_rg_name=cdw-shared-resources' \
+-var 'acr_name=cdwms' \
+--var-file=secrets.tfvars
 
-Docs coming soon.
-
-### Ingress Installation
-
-Docs coming soon.
-
-### Sample App Installation
-
-Docs coming soon.
-
-## Cluster Variations
-
-Currently, there are three variations of AKS clusters that you can create:
-
-  * [Basic Cluster](/basic-cluster/README.md) - A no-frills cluster with minimal configuration
-  and no explicit networking defined, which means it will default to kubenet.
-
-  * [Public Cluster](/public-cluster/README.md) - A public-facing cluster with Azure CNI networking
-    defined, resulting in a fully functional VNET and exposed through an external load balancer (ELB).
-
-  * [Private Cluster](/private-cluster/README.md) - A cluster built with Azure CNI networking that
-    is deployed with an internal load balancer (ILB), and is publicly exposed via an Azure App Gateway.
+```

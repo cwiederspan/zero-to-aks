@@ -8,7 +8,7 @@ resource "azurerm_application_insights" "insights" {
   name                = "${var.base_name}-appi"
   resource_group_name = var.resource_group
   location            = var.location
-  application_type    = "Web"
+  application_type    = "web"
 
   #tags = "${var.tags}"
 }
