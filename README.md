@@ -26,10 +26,10 @@ Now you can initialize Terraform, specifying the file above for the config.
 ```bash
 cd terraform
 
-terraform init --backend-config backend-secrets.tfvars
-
-# Alternative approach is to create a backend-secrets.tfvars file
+# If you haven't done so, you'll need a backend-secrets.tfvars file
 echo -e "storage_account_name = \"YOUR_STORAGE_ACCT_NAME\"\ncontainer_name = \"YOUR_STORAGE_CONTAINER\"\nkey = \"cluster.tfstate\"\naccess_key = \"YOUR_STORAGE_ACCT_KEY\"" >> backend-secrets.tfvars
+
+terraform init --backend-config backend-secrets.tfvars
 ```
 
 ### Secret Variables
