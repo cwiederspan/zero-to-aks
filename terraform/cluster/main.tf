@@ -11,10 +11,6 @@ provider "azurerm" {
   features {}
 }
 
-provider "azuread" {
-  version = "~> 1.1"
-}
-
 variable "name_prefix" {
   type        = string
   description = "A prefix for the naming scheme as part of prefix-base-suffix."

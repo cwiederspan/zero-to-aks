@@ -87,9 +87,18 @@ data "azurerm_container_registry" "acr" {
   name                 = var.acr_name
 }
 
-resource "azurerm_role_assignment" "acrpull_role" {
+# With system assigned managed identity, this is no longer needed. Use the permissions below
+# to setup AcrPull permissions for the cluster
+# resource "azurerm_role_assignment" "acrpull_role" {
+#   scope                            = data.azurerm_container_registry.acr.id
+#   role_definition_name             = "AcrPull"
+#   principal_id                     = azurerm_kubernetes_cluster.aks.identity[0].principal_id
+#   skip_service_principal_aad_check = true
+# }
+
+resource "azurerm_role_assignment" "acrpull_role_kubelet" {
   scope                            = data.azurerm_container_registry.acr.id
   role_definition_name             = "AcrPull"
-  principal_id                     = azurerm_kubernetes_cluster.aks.identity[0].principal_id
-  skip_service_principal_aad_check = true
+  principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+  # skip_service_principal_aad_check = true
 }

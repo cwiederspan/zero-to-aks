@@ -5,6 +5,10 @@ provider "random" {
   version = "2.1"
 }
 
+provider "azuread" {
+  version = "~> 1.1"
+}
+
 variable "base_name" { }
 
 # Generate random string to be used as service principal password
