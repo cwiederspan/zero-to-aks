@@ -4,6 +4,8 @@
 
 Rename the `secrets-sample.tfvars` file to `secrets.tfvars` and update the values in that file.
 
+Additionally, make sure you have logged into the AKS cluster using `az aks get-credentials`.
+
 ## Terraform Init
 
 ```bash

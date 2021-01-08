@@ -4,20 +4,28 @@ terraform {
   backend "azurerm" {
     environment = "public"
   }
+
+  required_providers {
+    
+    azurerm = {
+      version = "~> 2.42"
+    }
+
+    kubernetes = {
+      version = "~> 1.13"
+    }
+
+    helm = {
+      version = "~> 1.3"   # NOTE (CDW 1/8/2021): Versions 2.x don't seem to work properly
+    }
+  }
 }
 
 provider "azurerm" {
-  version = "~> 2.40"
   features {}
 }
 
-provider "kubernetes" {
-  version = "~> 1.13"
-}
-
 provider "helm" {
-  version = "~> 1.3"
-
   kubernetes {
     host                   = data.azurerm_kubernetes_cluster.aks.kube_config.0.host
     client_certificate     = base64decode(data.azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate)
@@ -95,6 +103,11 @@ resource "helm_release" "flux" {
   set {
     name  = "git.pollInterval"
     value = var.flux_poll_interval
+  }
+  
+  set {
+    name  = "git.readonly"
+    value = true
   }
   
   set {
