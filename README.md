@@ -23,49 +23,10 @@ values in a file called `backend-secrets-sample.tfvars` and remove the `-sample`
 
 Now you can initialize Terraform, specifying the file above for the config.
 
-```bash
-cd terraform
+## Create Kubernetes Cluster
 
-# If you haven't done so, you'll need a backend-secrets.tfvars file
-echo -e "storage_account_name = \"YOUR_STORAGE_ACCT_NAME\"\ncontainer_name = \"YOUR_STORAGE_CONTAINER\"\nkey = \"cluster.tfstate\"\naccess_key = \"YOUR_STORAGE_ACCT_KEY\"" >> backend-secrets.tfvars
+[Instructions](/terraform/cluster/README.md)
 
-terraform init --backend-config backend-secrets.tfvars
-```
+## Install and Setup FluxCD
 
-### Secret Variables
-
-Rename the `secrets-sample.tfvars` file to `secrets.tfvars` and update the values in that file.
-
-## Terraform the Cluster
-
-```bash
-
-# Run the plan to see the changes
-terraform plan \
--var 'name_prefix=cdw' \
--var 'name_base=kubernetes' \
--var 'name_suffix=20201215' \
--var 'location=westus2' \
--var 'node_count=2' \
--var 'enable_azure_policy=true' \
--var 'acr_rg_name=cdw-shared-resources' \
--var 'acr_name=cdwms' \
---var-file=secrets.tfvars
-
-
-# Apply the script with the specified variable values
-terraform apply \
--var 'name_prefix=cdw' \
--var 'name_base=kubernetes' \
--var 'name_suffix=20201215' \
--var 'location=westus2' \
--var 'node_count=2' \
--var 'enable_azure_policy=true' \
--var 'acr_rg_name=cdw-shared-resources' \
--var 'acr_name=cdwms' \
---var-file=secrets.tfvars
-
-```
-
-## Terraform Flux
-
+[Instructions](/terraform/flux/README.md)

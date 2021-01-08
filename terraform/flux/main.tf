@@ -58,6 +58,12 @@ variable "flux_poll_interval" {
   default     = "5m"
 }
 
+variable "flux_disable_registry_scanning" {
+  type        = bool
+  description = "Whether or not Flux will scan the container registry for image updates"
+  default     = true
+}
+
 data "azurerm_kubernetes_cluster" "aks" {
   resource_group_name = var.aks_rg
   name                = var.aks_name
@@ -94,6 +100,11 @@ resource "helm_release" "flux" {
   set {
     name = "registry.acr.enabled"
     value = true
+  }
+  
+  set {
+    name = "registry.disableScanning"
+    value = var.flux_disable_registry_scanning
   }
 
   set {

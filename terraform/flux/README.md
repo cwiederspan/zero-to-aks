@@ -1,6 +1,10 @@
-# Setup Flux
+# Deploy Flux
 
-## Setting Up
+## Setup
+
+Rename the `secrets-sample.tfvars` file to `secrets.tfvars` and update the values in that file.
+
+## Terraform Init
 
 ```bash
 
@@ -11,14 +15,14 @@ terraform init --backend-config backend-secrets.tfvars
 
 ```
 
-## Execution
+## Terraform Apply
 
 ```bash
 
 # Run the plan to see the changes
 terraform plan \
--var 'aks_rg=cdw-kubernetes-20201215' \
--var 'aks_name=cdw-kubernetes-20201215' \
+-var 'aks_rg=cdw-kubernetes-20210108' \
+-var 'aks_name=cdw-kubernetes-20210108' \
 -var 'flux_repo=git@github.com:cwiederspan/aks-flux-cluster01' \
 -var 'flux_path=production' \
 -var 'flux_poll_interval=2m'
@@ -26,8 +30,8 @@ terraform plan \
 
 # Apply the script with the specified variable values
 terraform apply \
--var 'aks_rg=cdw-kubernetes-20201215' \
--var 'aks_name=cdw-kubernetes-20201215' \
+-var 'aks_rg=cdw-kubernetes-20210108' \
+-var 'aks_name=cdw-kubernetes-20210108' \
 -var 'flux_repo=git@github.com:cwiederspan/aks-flux-cluster01' \
 -var 'flux_path=production' \
 -var 'flux_poll_interval=2m'
