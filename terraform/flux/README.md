@@ -6,6 +6,8 @@ Rename the `secrets-sample.tfvars` file to `secrets.tfvars` and update the value
 
 Additionally, make sure you have logged into the AKS cluster using `az aks get-credentials`.
 
+> **NOTE:** Be sure to apply any configuration files, such as config.yaml or secrets.yaml, before installing Flux.
+
 ## Terraform Init
 
 ```bash
