@@ -4,10 +4,16 @@ terraform {
   backend "azurerm" {
     environment = "public"
   }
+
+  required_providers {
+    
+    azurerm = {
+      version = "~> 2.42"
+    }
+  }
 }
 
 provider "azurerm" {
-  version = "~> 2.40"
   features {}
 }
 
