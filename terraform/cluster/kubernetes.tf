@@ -71,6 +71,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
     service_cidr       = "172.16.0.0/16"
     dns_service_ip     = "172.16.0.10"
     docker_bridge_cidr = "172.24.0.1/16"
+
+    #network_policy     = "calico"
   }
 
   # lifecycle {
@@ -81,6 +83,17 @@ resource "azurerm_kubernetes_cluster" "aks" {
 #     module.service_principal.client_id
 #   ]
 }
+
+# resource "azurerm_kubernetes_cluster_node_pool" "winnodepool" {
+#   name                  = "win001"
+#   kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
+#   vm_size               = "Standard_DS2_v2"
+#   node_count            = 1
+#   os_type               = "Windows"
+
+#   # Required for advanced networking
+#   vnet_subnet_id = azurerm_subnet.cluster.id
+# }
 
 data "azurerm_container_registry" "acr" {
   resource_group_name  = var.acr_rg_name

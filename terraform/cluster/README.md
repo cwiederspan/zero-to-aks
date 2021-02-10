@@ -22,7 +22,7 @@ terraform init --backend-config backend-secrets.tfvars
 terraform plan \
 -var 'name_prefix=cdw' \
 -var 'name_base=kubernetes' \
--var 'name_suffix=20210108' \
+-var 'name_suffix=20210210' \
 -var 'location=westus2' \
 -var 'node_count=2' \
 -var 'enable_azure_policy=true' \
@@ -35,7 +35,7 @@ terraform plan \
 terraform apply \
 -var 'name_prefix=cdw' \
 -var 'name_base=kubernetes' \
--var 'name_suffix=20210108' \
+-var 'name_suffix=20210210' \
 -var 'location=westus2' \
 -var 'node_count=2' \
 -var 'enable_azure_policy=true' \
