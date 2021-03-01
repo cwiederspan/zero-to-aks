@@ -8,11 +8,11 @@ terraform {
   required_providers {
     
     azurerm = {
-      version = "~> 2.42"
+      version = "~> 2.49"
     }
 
     kubernetes = {
-      version = "~> 1.13"
+      version = "~> 2.0"
     }
 
     helm = {
@@ -66,6 +66,12 @@ variable "flux_poll_interval" {
   default     = "5m"
 }
 
+variable "flux_read_only" {
+  type        = bool
+  description = "Whether or not Flux will operate in read-only mode"
+  default     = true
+}
+
 variable "flux_disable_registry_scanning" {
   type        = bool
   description = "Whether or not Flux will scan the container registry for image updates"
@@ -107,7 +113,7 @@ resource "helm_release" "flux" {
   
   set {
     name  = "git.readonly"
-    value = true
+    value = var.flux_read_only
   }
   
   set {

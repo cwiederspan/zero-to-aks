@@ -25,20 +25,21 @@ terraform init --backend-config backend-secrets.tfvars
 
 # Run the plan to see the changes
 terraform plan \
--var 'aks_rg=cdw-kubernetes-20210108' \
--var 'aks_name=cdw-kubernetes-20210108' \
+-var 'aks_rg=cdw-kubernetes-20210210' \
+-var 'aks_name=cdw-kubernetes-20210210' \
 -var 'flux_repo=git@github.com:cwiederspan/aks-flux-cluster01' \
 -var 'flux_path=production' \
--var 'flux_poll_interval=2m'
-
+-var 'flux_poll_interval=2m' \
+-var 'flux_read_only=false'
 
 # Apply the script with the specified variable values
 terraform apply \
--var 'aks_rg=cdw-kubernetes-20210108' \
--var 'aks_name=cdw-kubernetes-20210108' \
+-var 'aks_rg=cdw-kubernetes-20210210' \
+-var 'aks_name=cdw-kubernetes-20210210' \
 -var 'flux_repo=git@github.com:cwiederspan/aks-flux-cluster01' \
 -var 'flux_path=production' \
--var 'flux_poll_interval=2m'
+-var 'flux_poll_interval=2m' \
+-var 'flux_read_only=false'
 
 # Get the Flux User credentials
 fluxctl identity --k8s-fwd-ns=flux
