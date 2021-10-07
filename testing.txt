@@ -19,3 +19,8 @@ az aks update -n $NAME -g $NAME --attach-acr cdwkubernetes20211006
 az aks get-credentials -n $NAME -g $NAME
 
 kubectl run podinfo --image cdwkubernetes20211006.azurecr.io/podinfo:5.0.0
+
+az aks update -n $NAME -g $NAME --attach-acr cdwkubernetes20211006
+
+az acr login -n cdwkubernetes20211006
+
