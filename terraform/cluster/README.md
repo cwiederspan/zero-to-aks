@@ -24,7 +24,7 @@ terraform plan \
 -var 'name_base=kubernetes' \
 -var 'name_suffix=20211006' \
 -var 'location=westus2' \
--var 'node_count=2' \
+-var 'node_count=1' \
 -var 'enable_azure_policy=true' \
 -var 'acr_rg_name=cdw-shared-resources' \
 -var 'acr_name=cdwms' \
@@ -37,7 +37,7 @@ terraform apply \
 -var 'name_base=kubernetes' \
 -var 'name_suffix=20211006' \
 -var 'location=westus2' \
--var 'node_count=2' \
+-var 'node_count=1' \
 -var 'enable_azure_policy=true' \
 -var 'acr_rg_name=cdw-shared-resources' \
 -var 'acr_name=cdwms' \

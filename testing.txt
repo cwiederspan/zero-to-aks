@@ -1,0 +1,21 @@
+NAME=cdw-akstest-20211006
+LOCATION=westus2
+
+az group create -n $NAME -l $LOCATION
+
+az identity create --name $NAME-cplane --resource-group $NAME
+
+az identity create --name $NAME-kubelet --resource-group $NAME
+
+az aks create \
+  -g $NAME \
+  -n $NAME \
+  --generate-ssh-keys \
+  --assign-identity "/subscriptions/xxx/resourcegroups/cdw-akstest-20211006/providers/Microsoft.ManagedIdentity/userAssignedIdentities/cdw-akstest-20211006-cplane" \
+  --assign-kubelet-identity "/subscriptions/xxx/resourcegroups/cdw-akstest-20211006/providers/Microsoft.ManagedIdentity/userAssignedIdentities/cdw-akstest-20211006-kubelet"
+
+az aks update -n $NAME -g $NAME --attach-acr cdwkubernetes20211006
+
+az aks get-credentials -n $NAME -g $NAME
+
+kubectl run podinfo --image cdwkubernetes20211006.azurecr.io/podinfo:5.0.0

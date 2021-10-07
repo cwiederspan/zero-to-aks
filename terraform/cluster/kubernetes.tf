@@ -1,3 +1,23 @@
+resource "azurerm_user_assigned_identity" "cplane" {
+  resource_group_name = azurerm_resource_group.group.name
+  location            = azurerm_resource_group.group.location
+  name                = "${local.base_name}-cplane-msi"
+}
+
+resource "azurerm_user_assigned_identity" "kubelet" {
+  resource_group_name = azurerm_resource_group.group.name
+  location            = azurerm_resource_group.group.location
+  name                = "${local.base_name}-kubelet-msi"
+}
+
+resource "azurerm_container_registry" "acr" {
+  name                = "${replace(local.base_name, "-", "")}"
+  resource_group_name = azurerm_resource_group.group.name
+  location            = azurerm_resource_group.group.location
+  sku                 = "Standard"
+  admin_enabled       = false
+}
+
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = local.base_name
   resource_group_name = azurerm_resource_group.group.name
@@ -6,6 +26,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
   kubernetes_version  = var.aks_version
 
   api_server_authorized_ip_ranges = var.authorized_ip_addresses
+
+  automatic_channel_upgrade = "patch"
 
   default_node_pool {
     name                 = "lnx000"
@@ -26,7 +48,14 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   identity {
-    type = "SystemAssigned"
+    type                      = "UserAssigned"
+    user_assigned_identity_id = azurerm_user_assigned_identity.cplane.id
+  }
+
+  kubelet_identity {
+    client_id                 = azurerm_user_assigned_identity.kubelet.client_id
+    object_id                 = azurerm_user_assigned_identity.kubelet.principal_id
+    user_assigned_identity_id = azurerm_user_assigned_identity.kubelet.id
   }
 
 #   service_principal {
@@ -100,18 +129,14 @@ data "azurerm_container_registry" "acr" {
   name                 = var.acr_name
 }
 
-# With system assigned managed identity, this is no longer needed. Use the permissions below
-# to setup AcrPull permissions for the cluster
-# resource "azurerm_role_assignment" "acrpull_role" {
-#   scope                            = data.azurerm_container_registry.acr.id
-#   role_definition_name             = "AcrPull"
-#   principal_id                     = azurerm_kubernetes_cluster.aks.identity[0].principal_id
-#   skip_service_principal_aad_check = true
-# }
-
 resource "azurerm_role_assignment" "acrpull_role_kubelet" {
-  scope                            = data.azurerm_container_registry.acr.id
+  scope                            = azurerm_container_registry.acr.id
   role_definition_name             = "AcrPull"
-  principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
-  # skip_service_principal_aad_check = true
+  principal_id                     = azurerm_user_assigned_identity.kubelet.principal_id
+}
+
+resource "azurerm_role_assignment" "make_aks_kubelet_id_contributor" {
+  scope                = azurerm_user_assigned_identity.kubelet.id
+  role_definition_name = "Contributor"
+  principal_id         = azurerm_user_assigned_identity.cplane.principal_id
 }
